@@ -20,15 +20,17 @@ class Program
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            return Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-                "Library", "Application Support", "minecraft");
+            string? home = Environment.GetEnvironmentVariable("HOME");
+            if (string.IsNullOrEmpty(home))
+                throw new Exception("HOME not set on macOS.");
+            return Path.Combine(home, "Library", "Application Support", "minecraft");
         }
         else // Linux/Unix
         {
-            return Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-                ".minecraft");
+            string? home = Environment.GetEnvironmentVariable("HOME");
+            if (string.IsNullOrEmpty(home))
+                throw new Exception("HOME not set on Unix.");
+            return Path.Combine(home, ".minecraft");
         }
     }
 
