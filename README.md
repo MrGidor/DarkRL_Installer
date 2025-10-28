@@ -23,11 +23,12 @@ This project is designed to make the process of updating or installing large mod
 3. Open `cmd` (Windows) or your terminal (macOS/Linux).
 4. Run:
    ```
-   Modpack Installer.exe --url https://your.modpack.url/modpack.zip
+   ModpackInstaller-Win.exe --url https://your.modpack.url/modpack.zip
    ```
    or (on macOS/Linux):
    ```
-   ./Modpack\ Installer --url https://your.modpack.url/modpack.zip
+   ./ModpackInstaller-Linux --url https://your.modpack.url/modpack.zip
+   ./ModpackInstaller-OSX --url https://your.modpack.url/modpack.zip
    ```
 5. Follow the on-screen prompts. Your mods are installed!
 
