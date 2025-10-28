@@ -1,0 +1,15 @@
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\bin\Debug\net8.0\Modpack Installer.exe
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\bin\Debug\net8.0\Modpack Installer.deps.json
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\bin\Debug\net8.0\Modpack Installer.runtimeconfig.json
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\bin\Debug\net8.0\Modpack Installer.dll
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\bin\Debug\net8.0\Modpack Installer.pdb
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\obj\Debug\net8.0\Modpack Installer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\obj\Debug\net8.0\Modpack Installer.AssemblyInfoInputs.cache
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\obj\Debug\net8.0\Modpack Installer.AssemblyInfo.cs
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\obj\Debug\net8.0\Modpack Installer.csproj.CoreCompileInputs.cache
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\obj\Debug\net8.0\Modpack Installer.sourcelink.json
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\obj\Debug\net8.0\Modpack Installer.dll
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\obj\Debug\net8.0\refint\Modpack Installer.dll
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\obj\Debug\net8.0\Modpack Installer.pdb
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\obj\Debug\net8.0\Modpack Installer.genruntimeconfig.cache
+C:\Users\kazik\Documents\GitHub\DarkRL_Installer\Modpack Installer\obj\Debug\net8.0\ref\Modpack Installer.dll
