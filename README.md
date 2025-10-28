@@ -58,10 +58,10 @@ Want to make this even easier for your players or server community?
 3. (Optional) Edit the `DEFAULT_URL` in `Program.cs` to your modpack.
 4. Build:
    ```
-   dotnet publish -c Release -r win-x64 --self-contained true -o out
+   dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=false
    ```
    Replace `win-x64` with `linux-x64` or `osx-x64` as needed.
-5. Your standalone executable will be in the `out/` folder.
+5. Your standalone executable will be in the `\bin\Release\net8.0\win-x64\publish` folder.
 
 ---
 
