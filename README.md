@@ -50,7 +50,7 @@ Want to make this even easier for your players or server community?
 
 ## 🛠 Building From Source
 
-1. Install [.NET 6 SDK](https://dotnet.microsoft.com/download) or later.
+1. Install [.NET 8 SDK](https://dotnet.microsoft.com/download)
 2. Clone this repo:
    ```
    git clone https://github.com/MrGidor/Minecraft_Modpack_Installer.git
