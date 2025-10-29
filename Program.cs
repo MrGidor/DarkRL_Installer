@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
@@ -37,6 +38,66 @@ class Program
     static async Task DownloadModpack(string url, string downloadPath)
     {
         Console.WriteLine($"Downloading modpack from {url}...");
+
+        // Ensure target directory exists
+        var dir = Path.GetDirectoryName(downloadPath);
+        if (!string.IsNullOrEmpty(dir))
+            EnsureDir(dir);
+
+        // Only on macOS: try curl first (uses system TLS stack, often more compatible)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "curl",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = false,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                // args: -f (fail on HTTP errors), -L (follow redirects), -S (show error), -o <file> <url>
+                psi.ArgumentList.Add("-f");
+                psi.ArgumentList.Add("-L");
+                psi.ArgumentList.Add("-S");
+                psi.ArgumentList.Add("-o");
+                psi.ArgumentList.Add(downloadPath);
+                psi.ArgumentList.Add(url);
+
+                using var proc = Process.Start(psi);
+                if (proc == null)
+                    throw new InvalidOperationException("Failed to start curl process.");
+
+                var stderrTask = proc.StandardError.ReadToEndAsync();
+                await proc.WaitForExitAsync();
+
+                var stderr = await stderrTask;
+
+                if (proc.ExitCode == 0)
+                {
+                    Console.WriteLine($"Downloaded to {downloadPath}");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine($"curl failed with exit code {proc.ExitCode}. stderr: {stderr.Trim()}");
+                    Console.WriteLine("Falling back to HttpClient download...");
+                }
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                // 'curl' not found or cannot be executed
+                Console.WriteLine("curl not found in PATH or not executable on this system. Falling back to HttpClient.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"curl attempt threw: {ex.Message}. Falling back to HttpClient.");
+            }
+        }
+
+        // Default: HttpClient download (used on Windows/Linux and as fallback on macOS)
         using (var client = new HttpClient())
         using (var resp = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
         {
@@ -89,11 +150,11 @@ class Program
     static async Task<int> Main(string[] args)
     {
         System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls13;
+
         string url = DEFAULT_URL;
         bool yes = false;
         string? installerDir = null;
 
-        // Simple argument parsing
         for (int i = 0; i < args.Length; ++i)
         {
             switch (args[i])
@@ -157,6 +218,8 @@ class Program
         catch (HttpRequestException he)
         {
             Console.WriteLine($"Network error: {he.Message}");
+            if (he.InnerException != null)
+                Console.WriteLine($"Inner exception: {he.InnerException}");
             Console.WriteLine("Press any key to close the app...");
             Console.ReadKey();
             return 2;
