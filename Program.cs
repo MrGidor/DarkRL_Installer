@@ -88,6 +88,7 @@ class Program
 
     static async Task<int> Main(string[] args)
     {
+        System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls13;
         string url = DEFAULT_URL;
         bool yes = false;
         string? installerDir = null;
