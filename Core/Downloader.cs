@@ -41,6 +41,11 @@ public class Downloader
     {
         Console.WriteLine($"Downloading modpack from {url}...");
 
+        // Ensure target directory exists
+        var dir = Path.GetDirectoryName(downloadPath);
+        if (!string.IsNullOrEmpty(dir))
+            EnsureDir(dir);
+
         var handler = new SocketsHttpHandler
         {
             SslOptions = new System.Net.Security.SslClientAuthenticationOptions
