@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
@@ -10,8 +11,6 @@ namespace Modpack_Installer.Core;
 
 public class Downloader
 {
-    const string DEFAULT_URL = "https://mrgidor.github.io/downloads/DarkRL-Modpack.zip";
-
     public string GetMinecraftDir()
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -54,6 +53,58 @@ public class Downloader
             }
         };
 
+        // Only on macOS: try curl first (uses system TLS stack, often more compatible)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "curl",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = false,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                // args: -f (fail on HTTP errors), -L (follow redirects), -S (show error), -o <file> <url>
+                psi.ArgumentList.Add("-f");
+                psi.ArgumentList.Add("-L");
+                psi.ArgumentList.Add("-S");
+                psi.ArgumentList.Add("-o");
+                psi.ArgumentList.Add(downloadPath);
+                psi.ArgumentList.Add(url);
+
+                using var proc = Process.Start(psi);
+                if (proc == null)
+                    throw new InvalidOperationException("Failed to start curl process.");
+
+                var stderrTask = proc.StandardError.ReadToEndAsync();
+                await proc.WaitForExitAsync();
+
+                var stderr = await stderrTask;
+
+                if (proc.ExitCode == 0)
+                {
+                    Console.WriteLine($"Downloaded to {downloadPath}");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine($"curl failed with exit code {proc.ExitCode}. stderr: {stderr.Trim()}");
+                    Console.WriteLine("Falling back to HttpClient download...");
+                }
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                // 'curl' not found or cannot be executed
+                Console.WriteLine("curl not found in PATH or not executable on this system. Falling back to HttpClient.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"curl attempt threw: {ex.Message}. Falling back to HttpClient.");
+            }
+        }
 
         using (var client = new HttpClient(handler))
         using (var resp = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
@@ -103,5 +154,4 @@ public class Downloader
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
     }
-
 }
