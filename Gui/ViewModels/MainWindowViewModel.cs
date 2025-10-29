@@ -1,12 +1,21 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Shapes;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using Modpack_Installer.Core;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using System;
-using System.Net.Http;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Path = System.IO.Path;
 
 namespace Modpack_Installer.Gui.ViewModels;
 
@@ -73,7 +82,50 @@ public partial class MainWindowViewModel : ObservableObject
 
     private async Task DownloadWithProgress(string url, string path)
     {
-        Directory.CreateDirectory(Path.GetDirectoryName(path) ?? ".");
+
+        // Only on macOS: try curl first (uses system TLS stack, often more compatible)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            try
+            {
+                var psi = new ProcessStartInfo
+                {
+                    FileName = "curl",
+                    RedirectStandardError = true,   // capture progress/errors
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                Progress = 0;
+                psi.ArgumentList.Add("-f");   // fail on HTTP errors
+                psi.ArgumentList.Add("-L");   // follow redirects
+                psi.ArgumentList.Add("-S");   // show errors
+                psi.ArgumentList.Add("--retry"); psi.ArgumentList.Add("3"); // retry network issues
+                psi.ArgumentList.Add("-o"); psi.ArgumentList.Add(path);    // output file
+                psi.ArgumentList.Add(url);
+
+                using var proc = Process.Start(psi) ?? throw new InvalidOperationException("Failed to start curl.");
+
+                var stderrTask = proc.StandardError.ReadToEndAsync();
+
+                await proc.WaitForExitAsync();
+                var stderr = await stderrTask;
+
+                if (proc.ExitCode == 0)
+                {
+                    FinishDownload(path);
+
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine($"curl failed (exit {proc.ExitCode}): {stderr.Trim()}, falling back to HttpClient...");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"curl attempt threw: {ex.Message}, falling back to HttpClient...");
+            }
+        }
 
         using var client = new HttpClient();
         using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
@@ -104,6 +156,12 @@ public partial class MainWindowViewModel : ObservableObject
 
         Progress = 100;
 
+        FinishDownload(path);
+
+    }
+
+    private async void FinishDownload(string path)
+    {
         if (BackupMods)
             _downloader.RenameOldModsFolder(modPath);
         else if (Directory.Exists(modPath))
@@ -111,21 +169,12 @@ public partial class MainWindowViewModel : ObservableObject
 
         _downloader.EnsureDir(modPath);
 
-        int retries = 3;
-        while (true)
-        {
-            try
-            {
-                _downloader.UnzipModpack(path, modPath);
-                break;
-            }
-            catch (IOException)
-            {
-                if (retries-- == 0) throw;
-                await Task.Delay(200);
-            }
-        }
+        _downloader.UnzipModpack(path, modPath);
+
+        var box = MessageBoxManager
+        .GetMessageBoxStandard("Minecraft Modpack Downloader", $"Modpack downloaded to {path} and unzipped to the mods folder.",
+            ButtonEnum.Ok);
+
+        var result = await box.ShowAsync();
     }
-
-
 }
