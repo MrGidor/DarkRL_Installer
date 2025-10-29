@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Runtime.InteropServices;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 
 namespace Modpack_Installer.Core;
@@ -39,7 +40,17 @@ public class Downloader
     public async Task DownloadModpack(string url, string downloadPath)
     {
         Console.WriteLine($"Downloading modpack from {url}...");
-        using (var client = new HttpClient())
+
+        var handler = new SocketsHttpHandler
+        {
+            SslOptions = new System.Net.Security.SslClientAuthenticationOptions
+            {
+                EnabledSslProtocols = SslProtocols.Tls13
+            }
+        };
+
+
+        using (var client = new HttpClient(handler))
         using (var resp = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
         {
             resp.EnsureSuccessStatusCode();
