@@ -1,4 +1,12 @@
-﻿using System;
+﻿// -----------------------------------------------------------------------------
+// File: Downloader.cs
+// Author: Gidor 
+// Curl for MacOS: TTRCharlie
+// Description: Handles downloading modpacks
+// License: MIT License (see LICENSE file in the project root for details)
+// -----------------------------------------------------------------------------
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;

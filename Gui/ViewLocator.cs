@@ -1,3 +1,11 @@
+// -----------------------------------------------------------------------------
+// File: ViewLocator.cs
+// Author: Gidor 
+// Description: Locates and creates views for view models
+// License: MIT License (see LICENSE file in the project root for details)
+// -----------------------------------------------------------------------------
+
+
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;

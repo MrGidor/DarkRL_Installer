@@ -1,4 +1,11 @@
-﻿using Modpack_Installer.Core;
+﻿// -----------------------------------------------------------------------------
+// File: Program.cs (CLI Version)
+// Author: Gidor 
+// Description: Handles the terminal version of the modpack installer
+// License: MIT License (see LICENSE file in the project root for details)
+// -----------------------------------------------------------------------------
+
+using Modpack_Installer.Core;
 using System;
 using System.IO;
 using System.IO.Compression;

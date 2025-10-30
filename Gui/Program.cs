@@ -1,4 +1,12 @@
-﻿using Avalonia;
+﻿// -----------------------------------------------------------------------------
+// File: Program.cs (GUI Version)
+// Author: Gidor 
+// Description: Handles the main entry point for the modpack installer
+// License: MIT License (see LICENSE file in the project root for details)
+// -----------------------------------------------------------------------------
+
+
+using Avalonia;
 using Modpack_Installer.Gui;
 using System;
 
