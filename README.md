@@ -16,21 +16,32 @@ This project is designed to make the process of updating or installing large mod
 
 ## 🚀 Usage
 
-### The Simple Way
+### 1. Using the GUI (Recommended)
 
-1. **Download the prebuilt executable** for your operating system from the [Releases](../../releases) tab.
-2. Place it in your **Downloads** directory (or wherever you want).
-3. Open `cmd` (Windows) or your terminal (macOS/Linux).
-4. Run:
-   ```
+1. **Download the GUI version** of the installer from the [Releases](../../releases) tab.  
+2. Launch the application by double-clicking it.  
+3. Enter your **modpack URL** in the provided field or browse for a local ZIP file.  
+4. Click **Install** and follow the on-screen prompts. Your mods will be installed automatically!  
+
+---
+
+### 2. Using the Command-Line (Optional)
+
+If you prefer the classic terminal approach:
+
+1. **Download the prebuilt executable** for your OS from the [Releases](../../releases) tab.  
+2. Open `cmd` (Windows) or your terminal (macOS/Linux).  
+3. Run the installer with your modpack URL:  
+
+   **Windows:**  
+   ```bash
    ModpackInstaller-Win.exe --url https://your.modpack.url/modpack.zip
    ```
-   or (on macOS/Linux):
-   ```
+   **macOS/Linux**
+   ```bash
    ./ModpackInstaller-Linux --url https://your.modpack.url/modpack.zip
    ./ModpackInstaller-OSX --url https://your.modpack.url/modpack.zip
    ```
-5. Follow the on-screen prompts. Your mods are installed!
 
 > **Note:**  
 > The modpack **must be a ZIP file** containing all necessary mods.
