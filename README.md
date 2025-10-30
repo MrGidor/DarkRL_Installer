@@ -37,14 +37,11 @@ This project is designed to make the process of updating or installing large mod
 
 ---
 
-### For Forks & Server Owners
+### For Server Owners
 
-Want to make this even easier for your players or server community?
+Want to make installing modpacks even easier for your players or server community?
 
-- **Fork this repository**.
-- Change the `DEFAULT_URL` variable in the code to point to your own hosted modpack ZIP.
-- Build the tool (see below).
-- Distribute your custom installer or provide it in your repository!
+- Host your modpack somewhere example: a github.io website.
 
 ---
 
@@ -55,10 +52,14 @@ Want to make this even easier for your players or server community?
    ```
    git clone https://github.com/MrGidor/Minecraft_Modpack_Installer.git
    ```
-3. (Optional) Edit the `DEFAULT_URL` in `Program.cs` to your modpack.
-4. Build:
+3. Build:
+   GUI Version:
    ```
-   dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=false
+   dotnet publish Gui/Gui.csproj -c Release -r win-x64 /p:PublishSingleFile=true /p:PublishTrimmed=false
+   ```
+   Terminal command version:
+   ```
+   dotnet publish Cli/Cli.csproj -c Release -r win-x64 /p:PublishSingleFile=true /p:PublishTrimmed=false
    ```
    Replace `win-x64` with `linux-x64` or `osx-x64` as needed.
 5. Your standalone executable will be in the `\bin\Release\net8.0\win-x64\publish` folder.
