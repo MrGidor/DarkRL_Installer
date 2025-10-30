@@ -16,35 +16,43 @@ This project is designed to make the process of updating or installing large mod
 
 ## 🚀 Usage
 
-### The Simple Way
+### 1. Using the GUI (Recommended)
 
-1. **Download the prebuilt executable** for your operating system from the [Releases](../../releases) tab.
-2. Place it in your **Downloads** directory (or wherever you want).
-3. Open `cmd` (Windows) or your terminal (macOS/Linux).
-4. Run:
-   ```
+1. **Download the GUI version** of the installer from the [Releases](../../releases) tab.  
+2. Launch the application by double-clicking it.  
+3. Enter your **modpack URL** in the provided field or browse for a local ZIP file.  
+4. Click **Install** and follow the on-screen prompts. Your mods will be installed automatically!  
+
+---
+
+### 2. Using the Command-Line (Optional)
+
+If you prefer the classic terminal approach:
+
+1. **Download the prebuilt executable** for your OS from the [Releases](../../releases) tab.  
+2. Open `cmd` (Windows) or your terminal (macOS/Linux).  
+3. Run the installer with your modpack URL:  
+
+   **Windows:**  
+   ```bash
    ModpackInstaller-Win.exe --url https://your.modpack.url/modpack.zip
    ```
-   or (on macOS/Linux):
-   ```
+   **macOS/Linux**
+   ```bash
    ./ModpackInstaller-Linux --url https://your.modpack.url/modpack.zip
    ./ModpackInstaller-OSX --url https://your.modpack.url/modpack.zip
    ```
-5. Follow the on-screen prompts. Your mods are installed!
 
 > **Note:**  
 > The modpack **must be a ZIP file** containing all necessary mods.
 
 ---
 
-### For Forks & Server Owners
+### For Server Owners
 
-Want to make this even easier for your players or server community?
+Want to make installing modpacks even easier for your players or server community?
 
-- **Fork this repository**.
-- Change the `DEFAULT_URL` variable in the code to point to your own hosted modpack ZIP.
-- Build the tool (see below).
-- Distribute your custom installer or provide it in your repository!
+- Host your modpack somewhere example: a github.io website.
 
 ---
 
@@ -55,10 +63,14 @@ Want to make this even easier for your players or server community?
    ```
    git clone https://github.com/MrGidor/Minecraft_Modpack_Installer.git
    ```
-3. (Optional) Edit the `DEFAULT_URL` in `Program.cs` to your modpack.
-4. Build:
+3. Build:
+   GUI Version:
    ```
-   dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=false
+   dotnet publish Gui/Gui.csproj -c Release -r win-x64 /p:PublishSingleFile=true /p:PublishTrimmed=false
+   ```
+   Terminal command version:
+   ```
+   dotnet publish Cli/Cli.csproj -c Release -r win-x64 /p:PublishSingleFile=true /p:PublishTrimmed=false
    ```
    Replace `win-x64` with `linux-x64` or `osx-x64` as needed.
 5. Your standalone executable will be in the `\bin\Release\net8.0\win-x64\publish` folder.
