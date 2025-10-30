@@ -112,7 +112,7 @@ public partial class MainWindowViewModel : ObservableObject
 
                 if (proc.ExitCode == 0)
                 {
-                    FinishDownload(modPath);
+                    FinishDownload(path);
 
                     return;
                 }
